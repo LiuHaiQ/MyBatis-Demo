@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- #{}相当于JDBC的? $ {}是字符串拼接指令括号里面只能写value -->
+<mapper namespace="test">
+	<!-- id是sql的id -->
+	<!-- parameterType是传入的参数的类型,也可以是pojo对象 -->
+	<!-- resultType是映射的pojo类 -->
+	<select id="queryUserById" parameterType="int"
+		resultType="com.itheima.pojo.User">
+		SELECT
+		*
+		FROM
+		`mybatis`.`user`
+		WHERE id=#{id}
+	</select>
+	<!-- 模糊查询 -->
+	<!-- resultType:如果要返回数据集合，只需设定为每一个元素的数据类型 -->
+	<select id="queryUserByName" parameterType="string"
+		resultType="com.itheima.pojo.User">
+		<!-- SELECT * FROM USER WHERE username LIKE #{name} -->
+		SELECT * FROM USER WHERE username LIKE '%${value}%'
+	</select>
+	<!-- 插入数据 -->
+	<!-- useGeneratedKeys="true" keyProperty="id" 返回的数据列表 -->
+	<insert id="saveUser" parameterType="com.itheima.pojo.User"
+		useGeneratedKeys="true" keyProperty="id">
+
+		INSERT INTO USER
+		(`username`,
+		`birthday`,
+		`sex`,
+		`address`)
+		VALUES (#{username},
+		#{birthday},
+		#{sex},
+		#{address});
+	</insert>
+	<delete id="deleteUser" parameterType="int">
+	<!-- 删除User -->
+		DELETE FROM `mybatis`.`user` WHERE id=#{id}
+	</delete>
+	<update id="updateUser" parameterType="com.itheima.pojo.User">
+	<!-- parameterType放入的参数类型 -->
+	UPDATE USER SET username = #{username} WHERE id = #{id}
+	</update>
+</mapper>
